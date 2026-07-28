@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>اعرف نتيجتك مع المهندس محمد حماد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3EA;
+    --card:#FFFFFF;
+    --ink:#21201D;
+    --muted:#8A8377;
+    --line:#EAE2D6;
+    --coral:#EE5A45;
+    --coral-dark:#D63F2B;
+    --deep-green:#0F3D2E;
+    --deep-green-2:#16513D;
+    --gold:#E1972E;
+    --success:#2E9E5B;
+    --danger:#D64545;
+    --radius:18px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:
+      radial-gradient(circle at 10% -10%, #FCE3D6 0%, transparent 45%),
+      radial-gradient(circle at 110% 10%, #F6E7D0 0%, transparent 40%),
+      var(--cream);
+    min-height:100vh;
+    font-family:'Tajawal', sans-serif;
+    color:var(--ink);
+  }
+
+  .page{
+    max-width:1180px; margin:0 auto; padding:34px 20px 60px;
+    display:flex; align-items:flex-start; justify-content:space-between; gap:60px;
+  }
+
+  /* ---------- Brand header (mobile) ---------- */
+  .brand-mobile{ display:none; align-items:center; gap:10px; margin-bottom:20px; }
+  .brand-mobile .mark, .hero-badge svg{ flex-shrink:0; }
+
+  /* ---------- Left column: search card ---------- */
+  .stage{ width:100%; max-width:460px; flex-shrink:0; }
+
+  .card{
+    background:var(--card);
+    border-radius:24px;
+    padding:26px 22px 24px;
+    box-shadow:0 18px 40px -22px rgba(33,32,29,.28), 0 2px 8px -2px rgba(33,32,29,.06);
+    border:1px solid #F3ECE1;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:700; color:var(--coral-dark);
+    background:#FDEDE9; padding:5px 11px 5px 9px; border-radius:100px;
+    margin-bottom:14px;
+  }
+  .eyebrow svg{ width:12px; height:12px; }
+
+  h1.title{
+    font-family:'Cairo',sans-serif; font-weight:900; font-size:26px;
+    line-height:1.25; margin-bottom:6px;
+  }
+  h1.title em{ font-style:normal; color:var(--coral); }
+  .subtitle{ color:var(--muted); font-size:14px; margin-bottom:20px; }
+
+  .segmented{
+    display:flex; background:#F5EFE6; border-radius:14px; padding:4px;
+    position:relative; margin-bottom:16px;
+  }
+  .segmented button{
+    flex:1; border:none; background:transparent; position:relative; z-index:2;
+    font-family:'Tajawal',sans-serif; font-weight:700; font-size:14px;
+    padding:10px 6px; border-radius:10px; cursor:pointer; color:var(--muted);
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    transition:color .25s ease;
+  }
+  .segmented button svg{ width:15px; height:15px; }
+  .segmented button.active{ color:var(--ink); }
+  .segmented .slider{
+    position:absolute; top:4px; bottom:4px; width:calc(50% - 4px);
+    background:#fff; border-radius:10px; box-shadow:0 4px 10px -3px rgba(33,32,29,.18);
+    transition:transform .3s cubic-bezier(.6,-0.1,.3,1.4); z-index:1;
+  }
+  .segmented .slider.right{ transform:translateX(-100%); }
+
+  .field{ position:relative; margin-bottom:12px; }
+  .field input{
+    width:100%; border:1.5px solid var(--line); background:#FDFBF8;
+    border-radius:14px; padding:15px 44px 15px 16px; font-size:15px;
+    font-family:'Tajawal',sans-serif; color:var(--ink); outline:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .field input:focus{ border-color:var(--coral); background:#fff; }
+  .field input::placeholder{ color:#B7AFA1; }
+  .field .ico{
+    position:absolute; right:15px; top:50%; transform:translateY(-50%);
+    color:#B7AFA1; pointer-events:none; display:flex;
+  }
+  .field .ico svg{ width:17px; height:17px; }
+
+  .name-hint{ font-size:12px; color:var(--muted); margin:2px 2px 12px; line-height:1.6; }
+
+  .chips-label{ font-size:12.5px; font-weight:700; color:var(--ink); margin:14px 2px 8px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; min-height:2px; }
+  .chip{
+    display:flex; align-items:center; gap:8px;
+    background:#FDEDE9; border:1px solid #F6D8D0; color:var(--coral-dark);
+    padding:8px 12px; border-radius:11px; font-size:13.5px; font-weight:700;
+    animation:pop .18s ease;
+  }
+  .chip button{
+    border:none; background:#fff; color:var(--coral-dark); width:18px; height:18px;
+    border-radius:50%; cursor:pointer; font-size:12px; line-height:1;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  @keyframes pop{ from{ transform:scale(.85); opacity:0;} to{ transform:scale(1); opacity:1;} }
+
+  .btn-main{
+    width:100%; border:none; cursor:pointer; margin-top:16px;
+    background:linear-gradient(135deg, var(--coral), var(--coral-dark));
+    color:#fff; font-family:'Cairo',sans-serif; font-weight:800; font-size:16px;
+    padding:16px; border-radius:15px; display:flex; align-items:center;
+    justify-content:center; gap:10px;
+    box-shadow:0 14px 24px -12px rgba(214,63,43,.55);
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .btn-main:active{ transform:translateY(1px) scale(.99); }
+  .btn-main:disabled{ opacity:.55; cursor:not-allowed; }
+  .btn-main svg{ width:17px; height:17px; }
+
+  .status-line{
+    display:flex; align-items:center; gap:7px; margin-top:16px;
+    font-size:12px; color:var(--muted); justify-content:center;
+  }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--success); flex-shrink:0; }
+  .status-dot.busy{ background:var(--gold); animation:blink 1s infinite; }
+  @keyframes blink{ 50%{ opacity:.3; } }
+
+  .error-box{
+    background:#FDEDE9; border:1px solid #F6D8D0; color:var(--coral-dark);
+    padding:12px 14px; border-radius:12px; font-size:13.5px; margin-top:14px;
+    display:none; line-height:1.7;
+  }
+
+  /* ---------- Loading screen ---------- */
+  .loading-wrap{ display:none; text-align:center; padding:20px 6px 4px; }
+  .ring{
+    width:64px; height:64px; margin:0 auto 18px; border-radius:50%;
+    background:conic-gradient(var(--coral) var(--pct,0%), #F1E7DA 0);
+    display:flex; align-items:center; justify-content:center;
+    transition:background .25s ease;
+  }
+  .ring::after{ content:''; width:50px; height:50px; border-radius:50%; background:#fff; }
+  .loading-wrap p{ font-weight:700; font-family:'Cairo',sans-serif; font-size:15px; margin-bottom:4px; }
+  .loading-wrap span{ font-size:12.5px; color:var(--muted); }
+
+  /* ---------- Results list (multi-match) ---------- */
+  .list-wrap{ display:none; }
+  .list-wrap .back{
+    display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700;
+    color:var(--muted); background:none; border:none; cursor:pointer; margin-bottom:12px;
+    padding:4px;
+  }
+  .list-wrap .back svg{ width:14px; height:14px; }
+  .match-count{ font-size:13px; color:var(--muted); margin-bottom:12px; }
+  .result-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    width:100%; text-align:right; background:#FDFBF8; border:1.5px solid var(--line);
+    border-radius:14px; padding:13px 14px; margin-bottom:10px; cursor:pointer;
+    font-family:'Tajawal',sans-serif; transition:border-color .15s ease, background .15s ease;
+  }
+  .result-item:hover{ border-color:var(--coral); background:#fff; }
+  .result-item .ri-name{ font-weight:700; font-size:14.5px; }
+  .result-item .ri-seat{ font-size:12px; color:var(--muted); margin-top:3px; }
+  .result-item .ri-arrow{ color:var(--coral); flex-shrink:0; }
+  .result-item .ri-arrow svg{ width:16px; height:16px; }
+  .empty-state{ text-align:center; padding:30px 10px 10px; }
+  .empty-state svg{ width:46px; height:46px; color:#D8CFC0; margin-bottom:12px; }
+  .empty-state p{ font-weight:700; font-family:'Cairo',sans-serif; margin-bottom:4px; }
+  .empty-state span{ font-size:13px; color:var(--muted); line-height:1.7; }
+
+  /* ---------- Result screen (light card, like reference) ---------- */
+  .result-wrap{ display:none; }
+  .result-card{
+    background:#fff; border-radius:22px; padding:22px 22px 24px;
+    border:1px solid #F3ECE1;
+    box-shadow:0 18px 40px -22px rgba(33,32,29,.28), 0 2px 8px -2px rgba(33,32,29,.06);
+    position:relative; overflow:hidden;
+  }
+  .result-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:16px; }
+
+  .ribbon{
+    position:relative;
+    background:var(--deep-green); color:#fff;
+    font-family:'Cairo',sans-serif; font-weight:800; font-size:12.5px;
+    padding:7px 16px 7px 14px; border-radius:8px 8px 8px 0;
+  }
+  .ribbon::after{
+    content:''; position:absolute; right:0; bottom:-7px;
+    border-width:7px 8px 0 0; border-style:solid;
+    border-color:#0A2A20 transparent transparent transparent;
+  }
+  .ribbon.fail{ background:var(--danger); }
+  .ribbon.fail::after{ border-color:#8F2D2D transparent transparent transparent; }
+
+  .seal{
+    width:40px; height:40px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(150deg,#3FBE7C,var(--success));
+    box-shadow:0 8px 16px -6px rgba(46,158,91,.55);
+    transform:scale(.4) rotate(-25deg); opacity:0;
+    animation:stamp .55s .15s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  .seal.fail{ background:linear-gradient(150deg,#EA8B8B,var(--danger)); box-shadow:0 8px 16px -6px rgba(214,69,69,.55); }
+  .seal svg{ width:20px; height:20px; color:#fff; }
+  @keyframes stamp{ to{ transform:scale(1) rotate(0deg); opacity:1; } }
+
+  .r-name{ font-family:'Cairo',sans-serif; font-weight:800; font-size:19px; line-height:1.35; margin-bottom:6px; }
+  .r-seat{ font-size:12.5px; color:var(--muted); margin-bottom:16px; }
+  .r-seat b{ color:var(--ink); font-weight:700; letter-spacing:.5px; }
+
+  .divider{ height:1px; background:var(--line); margin-bottom:16px; }
+
+  .stat-row{ display:flex; align-items:flex-start; margin-bottom:14px; }
+  .stat-col{ flex:1; }
+  .stat-col .lbl{ font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .stat-col .val{ font-family:'Cairo',sans-serif; font-weight:800; font-size:16px; }
+  .stat-col.status-col .val{ color:var(--success); }
+  .stat-col.status-col.fail .val{ color:var(--danger); }
+  .stat-col.pct-col{ text-align:left; }
+  .stat-col.pct-col .val{ font-size:30px; color:var(--gold); }
+  .stat-col.pct-col.fail .val{ color:var(--danger); }
+
+  .new-search-btn{
+    display:flex; align-items:center; gap:6px; background:#F5EFE6;
+    border:1px solid var(--line); color:var(--ink); font-size:12.5px; font-weight:700;
+    padding:8px 12px; border-radius:100px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    white-space:nowrap;
+  }
+  .new-search-btn svg{ width:13px; height:13px; }
+
+  .bar-track{ height:8px; background:#F1E7DA; border-radius:100px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:100px; background:linear-gradient(90deg,#E1972E,#F4C55A); width:0%; transition:width 1s cubic-bezier(.2,.9,.25,1) .3s; }
+  .bar-fill.fail{ background:linear-gradient(90deg,var(--danger),#EA8B8B); }
+
+  /* ---------- Footer (mobile, under card) ---------- */
+  .footer{ text-align:center; margin-top:26px; }
+  .footer a{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    color:var(--muted); font-size:12.5px; font-weight:500;
+    background:rgba(255,255,255,.6); border:1px solid var(--line);
+    padding:8px 14px; border-radius:100px; transition:color .2s ease, border-color .2s ease;
+  }
+  .footer a:hover{ color:var(--coral-dark); border-color:#F6D8D0; }
+  .footer a svg{ width:14px; height:14px; }
+
+  .hidden{ display:none !important; }
+  .show-flex{ display:flex !important; }
+  .show-block{ display:block !important; }
+
+  /* ---------- Right column: hero ---------- */
+  .hero{ flex:1; padding-top:26px; min-width:0; }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:6px; margin-bottom:22px; margin-inline-start:auto;
+    float:left;
+    font-size:12px; font-weight:700; color:var(--deep-green-2);
+    background:#E4EFE7; padding:7px 14px; border-radius:100px;
+  }
+  .hero-badge svg{ width:14px; height:14px; }
+  .hero-clear{ clear:both; }
+
+  .hero h2{
+    font-family:'Cairo',sans-serif; font-weight:900; font-size:52px; line-height:1.2;
+    margin-bottom:6px;
+  }
+  .hero h2 span.accent{
+    color:var(--coral); position:relative; display:inline-block;
+  }
+  .hero h2 span.accent svg{
+    position:absolute; right:0; bottom:-8px; width:100%; height:14px;
+  }
+  .hero p.lead{ color:var(--muted); font-size:15.5px; line-height:1.9; margin:18px 0 8px; max-width:480px; }
+  .hero p.lead b{ color:var(--ink); font-weight:700; }
+
+  .hero-actions{ display:flex; align-items:center; gap:18px; margin-top:22px; flex-wrap:wrap; }
+  .visit-badge{ text-align:center; }
+  .visit-badge .num{ font-family:'Cairo',sans-serif; font-weight:900; font-size:15px; }
+  .visit-badge .lbl{ font-size:11.5px; color:var(--muted); }
+  .demo-btn{
+    display:flex; align-items:center; gap:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:100px;
+    padding:9px 9px 9px 18px; cursor:pointer; font-family:'Tajawal',sans-serif;
+    font-weight:700; font-size:13.5px; color:var(--ink);
+    box-shadow:0 10px 20px -14px rgba(33,32,29,.3);
+  }
+  .demo-btn .medal{
+    width:28px; height:28px; border-radius:50%; background:linear-gradient(150deg,#F4C55A,var(--gold));
+    display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;
+  }
+  .demo-btn .medal svg{ width:14px; height:14px; }
+
+  .feature-strip{
+    display:flex; gap:34px; margin-top:70px; flex-wrap:wrap;
+  }
+  .feature-strip .f{ display:flex; align-items:center; gap:10px; }
+  .feature-strip .f .ic{
+    width:34px; height:34px; border-radius:10px; background:#F5EFE6;
+    display:flex; align-items:center; justify-content:center; color:var(--coral-dark); flex-shrink:0;
+  }
+  .feature-strip .f .ic svg{ width:16px; height:16px; }
+  .feature-strip .f .tx{ font-size:12.5px; font-weight:700; line-height:1.5; }
+  .feature-strip .f .tx small{ display:block; font-weight:400; color:var(--muted); font-size:11px; }
+
+  @media (max-width:980px){
+    .page{ flex-direction:column-reverse; gap:34px; padding-top:24px; }
+    .hero{ width:100%; padding-top:0; text-align:center; }
+    .hero-badge{ float:none; margin-inline:auto; }
+    .hero h2{ font-size:36px; }
+    .hero p.lead{ margin-inline:auto; }
+    .hero-actions{ justify-content:center; }
+    .feature-strip{ display:none; }
+    .stage{ max-width:460px; margin:0 auto; }
+    .brand-mobile{ display:flex; }
+  }
+
+  @media (max-width:380px){
+    .card{ padding:22px 17px 20px; }
+    h1.title{ font-size:22px; }
+    .hero h2{ font-size:29px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ================= LEFT: SEARCH CARD ================= -->
+  <div class="stage">
+
+    <div class="brand-mobile">
+      <div class="mark" style="width:38px;height:38px;border-radius:11px;background:linear-gradient(150deg,var(--coral),var(--coral-dark));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -6px rgba(238,90,69,.55);">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><path d="M9 13l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <b style="font-family:'Cairo',sans-serif;font-weight:800;font-size:17px;display:block;">نتيجتك</b>
+        <span style="font-size:12px;color:var(--muted);">مع المهندس محمد حماد</span>
+      </div>
+    </div>
+
+    <!-- ================= SEARCH SCREEN ================= -->
+    <div class="card" id="searchScreen">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        ابدأ من هنا
+      </span>
+      <h1 class="title">دَوّر على <em>النتيجة</em></h1>
+      <p class="subtitle">اختار طريقة البحث الأنسب ليك</p>
+
+      <div class="segmented">
+        <div class="slider" id="segSlider"></div>
+        <button type="button" id="tabName" class="active">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          اسم الطالب
+        </button>
+        <button type="button" id="tabSeat">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 9h4M7 13h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          رقم الجلوس
+        </button>
+      </div>
+
+      <!-- Seat number mode -->
+      <div id="seatMode" class="hidden">
+        <div class="field">
+          <input type="text" inputmode="numeric" id="seatInput" placeholder="اكتب رقم الجلوس" maxlength="10">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <p class="name-hint">رقم الجلوس المكوّن من الأرقام الموجودة على بطاقة الجلوس الخاصة بيك</p>
+      </div>
+
+      <!-- Name mode -->
+      <div id="nameMode">
+        <div class="field">
+          <input type="text" id="nameInput" placeholder="اكتب اسم الطالب">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <p class="name-hint">اكتب اسمين أو أكتر، ويمكن إضافة اسم العائلة بأي ترتيب</p>
+        <div class="chips-label" id="chipsLabel" style="display:none;">اكتب اسم الطالب</div>
+        <div class="chips" id="chipsHolder"></div>
+      </div>
+
+      <button class="btn-main" id="submitBtn" type="button">
+        <span id="submitLabel">عرض النتيجة</span>
+        <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="error-box" id="errorBox"></div>
+      <div class="status-line" id="statusLine">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">جاهز للبحث</span>
+      </div>
+    </div>
+
+    <!-- ================= LOADING ================= -->
+    <div class="card loading-wrap" id="loadingScreen">
+      <div class="ring" id="loadRing"></div>
+      <p>بنجمّع بيانات النتيجة...</p>
+      <span id="loadDetail">جاري تحميل 0 من 20 ملف</span>
+    </div>
+
+    <!-- ================= MULTI-MATCH LIST ================= -->
+    <div class="card list-wrap" id="listScreen">
+      <button class="back" id="backFromList">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M5 12l6-6M5 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"/></svg>
+        بحث جديد
+      </button>
+      <h1 class="title" style="font-size:19px;">اختار الطالب</h1>
+      <p class="match-count" id="matchCount"></p>
+      <div id="listHolder"></div>
+    </div>
+
+    <!-- ================= RESULT ================= -->
+    <div class="result-wrap" id="resultScreen">
+      <div class="result-card">
+        <div class="result-top">
+          <span class="ribbon" id="congratsTag">ألف مبروك يا بطل!</span>
+          <button class="new-search-btn" id="newSearchBtn">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 1 2.6 6.3M3 12V6m0 6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            بحث جديد
+          </button>
+        </div>
+
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+          <div>
+            <h2 class="r-name" id="rName">—</h2>
+            <p class="r-seat">رقم الجلوس: <b id="rSeat">—</b></p>
+          </div>
+          <div class="seal" id="resultSeal">
+            <svg id="sealIconPass" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg id="sealIconFail" viewBox="0 0 24 24" fill="none" class="hidden"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="stat-row">
+          <div class="stat-col status-col" id="statusCol">
+            <div class="lbl">الحالة</div>
+            <div class="val" id="rStatus">—</div>
+          </div>
+          <div class="stat-col">
+            <div class="lbl">المجموع</div>
+            <div class="val" id="rTotal">—</div>
+          </div>
+          <div class="stat-col pct-col" id="pctCol">
+            <div class="lbl">النسبة المئوية</div>
+            <div class="val" id="rPct">—</div>
+          </div>
+        </div>
+
+        <div class="bar-track"><div class="bar-fill" id="rBar"></div></div>
+      </div>
+
+      <div class="footer">
+        <a href="https://www.facebook.com/en.mohamed.nasr" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M13 22v-8h2.6l.4-3H13V9c0-.9.2-1.5 1.6-1.5H16V5c-.3 0-1.2-.1-2.3-.1C11.4 4.9 10 6.3 10 8.7V11H7.4v3H10v8h3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          برمجة وتطوير المهندس محمد حماد
+        </a>
+      </div>
+    </div>
+
+    <div class="footer" id="mainFooter">
+      <a href="https://www.facebook.com/en.mohamed.nasr" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M13 22v-8h2.6l.4-3H13V9c0-.9.2-1.5 1.6-1.5H16V5c-.3 0-1.2-.1-2.3-.1C11.4 4.9 10 6.3 10 8.7V11H7.4v3H10v8h3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        برمجة وتطوير المهندس محمد حماد
+      </a>
+    </div>
+  </div>
+
+  <!-- ================= RIGHT: HERO ================= -->
+  <div class="hero">
+    <span class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      نتيجة الثانوية العامة
+    </span>
+    <div class="hero-clear"></div>
+    <h2>اعرف نتيجتك<br>مع <span class="accent">المهندس محمد حماد</span></h2>
+    <p class="lead">اكتب رقم جلوسك أو اسمك، واعرف نتيجتك كاملة بسهولة وسرعة.<br><b>خطوتك للنتيجة أقرب مما تتخيل.</b></p>
+
+    <div class="hero-actions">
+      <button class="demo-btn" id="demoBtn" type="button">
+        <span class="medal"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 13.5L7 21l5-2.4 5 2.4-1.5-7.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
+        جرب نتيجة تجريبية
+      </button>
+      <div class="visit-badge">
+        <div class="num" id="visitCount">—</div>
+        <div class="lbl">زيارة للموقع</div>
+      </div>
+    </div>
+
+    <div class="feature-strip">
+      <div class="f">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+        <div class="tx">خصوصية وأمان<small>من غير تسجيل بيانات</small></div>
+      </div>
+      <div class="f">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <div class="tx">بيانات مباشرة<small>من قاعدة بيانات موثقة</small></div>
+      </div>
+      <div class="f">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+        <div class="tx">بحث سريع<small>النتيجة في ثواني</small></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------- Config ----------------
+  var SHARD_COUNT = 20;
+  var SHARD_URLS = [];
+  for (var i = 0; i < SHARD_COUNT; i++){
+    var idx = (i < 10 ? "0" + i : "" + i);
+    SHARD_URLS.push("data/" + idx + "d.json");
+  }
+  var MAX_TOTAL = 320; // أقصى مجموع للدرجات (لحساب النسبة المئوية)
+
+  // ---------------- State ----------------
+  var allRecords = null;
+  var isLoading = false;
+  var mode = "name";
+  var nameChips = [];
+
+  // ---------------- Elements ----------------
+  var el = {
+    tabSeat: document.getElementById("tabSeat"),
+    tabName: document.getElementById("tabName"),
+    segSlider: document.getElementById("segSlider"),
+    seatMode: document.getElementById("seatMode"),
+    nameMode: document.getElementById("nameMode"),
+    seatInput: document.getElementById("seatInput"),
+    nameInput: document.getElementById("nameInput"),
+    chipsHolder: document.getElementById("chipsHolder"),
+    chipsLabel: document.getElementById("chipsLabel"),
+    submitBtn: document.getElementById("submitBtn"),
+    submitLabel: document.getElementById("submitLabel"),
+    errorBox: document.getElementById("errorBox"),
+    statusText: document.getElementById("statusText"),
+    statusDot: document.getElementById("statusDot"),
+
+    searchScreen: document.getElementById("searchScreen"),
+    loadingScreen: document.getElementById("loadingScreen"),
+    listScreen: document.getElementById("listScreen"),
+    resultScreen: document.getElementById("resultScreen"),
+    mainFooter: document.getElementById("mainFooter"),
+
+    loadRing: document.getElementById("loadRing"),
+    loadDetail: document.getElementById("loadDetail"),
+
+    backFromList: document.getElementById("backFromList"),
+    matchCount: document.getElementById("matchCount"),
+    listHolder: document.getElementById("listHolder"),
+
+    newSearchBtn: document.getElementById("newSearchBtn"),
+    resultSeal: document.getElementById("resultSeal"),
+    sealIconPass: document.getElementById("sealIconPass"),
+    sealIconFail: document.getElementById("sealIconFail"),
+    congratsTag: document.getElementById("congratsTag"),
+    statusCol: document.getElementById("statusCol"),
+    pctCol: document.getElementById("pctCol"),
+    rName: document.getElementById("rName"),
+    rSeat: document.getElementById("rSeat"),
+    rStatus: document.getElementById("rStatus"),
+    rTotal: document.getElementById("rTotal"),
+    rPct: document.getElementById("rPct"),
+    rBar: document.getElementById("rBar"),
+
+    demoBtn: document.getElementById("demoBtn"),
+    visitCount: document.getElementById("visitCount")
+  };
+
+  // ---------------- Helpers ----------------
+  function toArabicDigits(str){
+    var map = {"0":"٠","1":"١","2":"٢","3":"٣","4":"٤","5":"٥","6":"٦","7":"٧","8":"٨","9":"٩"};
+    return String(str).replace(/[0-9]/g, function(d){ return map[d]; });
+  }
+
+  function toWesternDigits(str){
+    var map = {"٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9"};
+    return String(str).replace(/[٠-٩]/g, function(d){ return map[d]; });
+  }
+
+  function normalizeArabic(str){
+    return toWesternDigits(String(str || ""))
+      .replace(/[\u064B-\u0652\u0670\u0640]/g, "")
+      .replace(/[أإآٱ]/g, "ا")
+      .replace(/ى/g, "ي")
+      .replace(/ة/g, "ه")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function formatNumber(n){
+    var num = Math.round(n * 100) / 100;
+    var s = (num % 1 === 0) ? String(num) : String(num);
+    return toArabicDigits(s);
+  }
+
+  function showScreen(name){
+    el.searchScreen.classList.add("hidden");
+    el.loadingScreen.style.display = "none";
+    el.listScreen.style.display = "none";
+    el.resultScreen.style.display = "none";
+    el.mainFooter.style.display = "none";
+
+    if (name === "search"){ el.searchScreen.classList.remove("hidden"); el.mainFooter.style.display = "block"; }
+    if (name === "loading"){ el.loadingScreen.style.display = "block"; }
+    if (name === "list"){ el.listScreen.style.display = "block"; el.mainFooter.style.display = "block"; }
+    if (name === "result"){ el.resultScreen.style.display = "block"; }
+  }
+
+  function setError(msg){
+    if (!msg){ el.errorBox.style.display = "none"; el.errorBox.textContent = ""; return; }
+    el.errorBox.textContent = msg;
+    el.errorBox.style.display = "block";
+  }
+
+  function setStatus(text, busy){
+    el.statusText.textContent = text;
+    el.statusDot.className = "status-dot" + (busy ? " busy" : "");
+  }
+
+  function classifyStatus(status){
+    var s = status || "";
+    if (s.indexOf("راسب") !== -1) return { kind:"fail" };
+    if (s.indexOf("غياب") !== -1) return { kind:"absent" };
+    if (s.indexOf("ثان") !== -1)  return { kind:"second" };
+    if (s.indexOf("ناجح") !== -1) return { kind:"pass" };
+    return { kind:"other" };
+  }
+
+  // ---------------- Data loading ----------------
+  function loadAllData(onDone, onFail){
+    if (allRecords){ onDone(allRecords); return; }
+    if (isLoading){ return; }
+    isLoading = true;
+    showScreen("loading");
+
+    var loaded = 0;
+    var combined = [];
+    var anyFailed = false;
+
+    function updateProgress(){
+      var pct = Math.round((loaded / SHARD_COUNT) * 100);
+      el.loadRing.style.setProperty("--pct", pct + "%");
+      el.loadDetail.textContent = "جاري تحميل " + toArabicDigits(loaded) + " من " + toArabicDigits(SHARD_COUNT) + " ملف";
+    }
+    updateProgress();
+
+    var tasks = SHARD_URLS.map(function(url){
+      return fetch(url, { cache: "force-cache" })
+        .then(function(res){
+          if (!res.ok) throw new Error("bad status " + res.status);
+          return res.json();
+        })
+        .then(function(json){
+          if (Array.isArray(json)) combined = combined.concat(json);
+          loaded++; updateProgress();
+        })
+        .catch(function(err){
+          anyFailed = true;
+          loaded++; updateProgress();
+          console.warn("Failed to load shard:", url, err);
+        });
+    });
+
+    Promise.all(tasks).then(function(){
+      isLoading = false;
+      if (combined.length === 0){
+        if (onFail) onFail();
+        return;
+      }
+      allRecords = combined;
+      if (anyFailed){
+        console.warn("بعض ملفات البيانات لم يتم تحميلها، النتائج قد تكون غير كاملة.");
+      }
+      onDone(allRecords);
+    });
+  }
+
+  // ---------------- Mode switching ----------------
+  function setMode(next){
+    mode = next;
+    setError(null);
+    if (mode === "seat"){
+      el.tabSeat.classList.add("active");
+      el.tabName.classList.remove("active");
+      el.segSlider.classList.add("right");
+      el.seatMode.classList.remove("hidden");
+      el.nameMode.classList.add("hidden");
+    } else {
+      el.tabName.classList.add("active");
+      el.tabSeat.classList.remove("active");
+      el.segSlider.classList.remove("right");
+      el.nameMode.classList.remove("hidden");
+      el.seatMode.classList.add("hidden");
+    }
+  }
+  el.tabSeat.addEventListener("click", function(){ setMode("seat"); });
+  el.tabName.addEventListener("click", function(){ setMode("name"); });
+
+  // ---------------- Name chips ----------------
+  function renderChips(){
+    el.chipsHolder.innerHTML = "";
+    el.chipsLabel.style.display = nameChips.length ? "block" : "none";
+    nameChips.forEach(function(word, idx){
+      var chip = document.createElement("div");
+      chip.className = "chip";
+      var span = document.createElement("span");
+      span.textContent = word;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = "×";
+      btn.addEventListener("click", function(){
+        nameChips.splice(idx, 1);
+        renderChips();
+      });
+      chip.appendChild(span);
+      chip.appendChild(btn);
+      el.chipsHolder.appendChild(chip);
+    });
+  }
+
+  function addChipFromInput(){
+    var val = el.nameInput.value.trim();
+    if (!val) return;
+    nameChips.push(val);
+    el.nameInput.value = "";
+    renderChips();
+  }
+
+  el.nameInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){
+      e.preventDefault();
+      addChipFromInput();
+    }
+  });
+
+  // ---------------- Search logic ----------------
+  function doSeatSearch(){
+    var raw = toWesternDigits(el.seatInput.value || "").replace(/\D/g, "");
+    if (!raw){
+      setError("من فضلك اكتب رقم الجلوس أولاً");
+      return;
+    }
+    setError(null);
+    setStatus("بنبحث عن رقم الجلوس...", true);
+
+    loadAllData(function(records){
+      var match = records.filter(function(r){ return String(r[0]) === raw; });
+      if (match.length === 0){
+        setStatus("جاهز للبحث", false);
+        showNoResults("مفيش نتيجة لرقم الجلوس ده", "تأكد من الرقم وحاول تاني، أو جرب البحث بالاسم بدل رقم الجلوس.");
+      } else {
+        setStatus("تم العثور على النتيجة", false);
+        showResult(match[0]);
+      }
+    }, function(){
+      setStatus("جاهز للبحث", false);
+      setError("تعذر تحميل قاعدة بيانات النتيجة. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.");
+      showScreen("search");
+    });
+  }
+
+  function doNameSearch(){
+    var pending = el.nameInput.value.trim();
+    var words = nameChips.slice();
+    if (pending) words.push(pending);
+
+    if (words.length === 0){
+      setError("اكتب اسم الطالب على الأقل (اسمين أو أكتر أفضل للدقة)");
+      return;
+    }
+    setError(null);
+
+    var terms = [];
+    words.forEach(function(w){
+      normalizeArabic(w).split(" ").forEach(function(t){ if (t) terms.push(t); });
+    });
+    if (terms.length === 0){
+      setError("اكتب اسم الطالب على الأقل");
+      return;
+    }
+
+    setStatus("بنبحث بالاسم...", true);
+
+    loadAllData(function(records){
+      var matches = records.filter(function(r){
+        var normName = normalizeArabic(r[1]);
+        return terms.every(function(t){ return normName.indexOf(t) !== -1; });
+      });
+
+      setStatus("جاهز للبحث", false);
+
+      if (matches.length === 0){
+        showNoResults("مفيش نتائج مطابقة", "جرب تقلل عدد الكلمات، أو تأكد من كتابة الاسم صح.");
+      } else if (matches.length === 1){
+        showResult(matches[0]);
+      } else {
+        showList(matches);
+      }
+    }, function(){
+      setStatus("جاهز للبحث", false);
+      setError("تعذر تحميل قاعدة بيانات النتيجة. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.");
+      showScreen("search");
+    });
+  }
+
+  el.submitBtn.addEventListener("click", function(){
+    if (mode === "seat") doSeatSearch();
+    else doNameSearch();
+  });
+  el.seatInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter") doSeatSearch();
+  });
+
+  // ---------------- Multi-match list screen ----------------
+  function showList(matches){
+    el.listHolder.innerHTML = "";
+    el.matchCount.textContent = "لقينا " + toArabicDigits(matches.length) + " نتيجة قريبة من بحثك — اختار الطالب الصح:";
+    var capped = matches.slice(0, 40);
+    capped.forEach(function(rec){
+      var item = document.createElement("button");
+      item.type = "button";
+      item.className = "result-item";
+      item.innerHTML =
+        '<div><div class="ri-name">' + escapeHtml(rec[1]) + '</div>' +
+        '<div class="ri-seat">رقم الجلوس: ' + toArabicDigits(rec[0]) + '</div></div>' +
+        '<span class="ri-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+      item.addEventListener("click", function(){ showResult(rec); });
+      el.listHolder.appendChild(item);
+    });
+    showScreen("list");
+  }
+
+  function showNoResults(title, sub){
+    el.listHolder.innerHTML =
+      '<div class="empty-state">' +
+      '<svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.3-4.3M8 11h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>' +
+      '<p>' + escapeHtml(title) + '</p><span>' + escapeHtml(sub) + '</span></div>';
+    el.matchCount.textContent = "";
+    showScreen("list");
+  }
+
+  el.backFromList.addEventListener("click", function(){ showScreen("search"); });
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  // ---------------- Result screen ----------------
+  function showResult(rec){
+    var seat = rec[0], name = rec[1], score = Number(rec[2]) || 0, status = rec[3] || "";
+    var cls = classifyStatus(status);
+    var isFail = (cls.kind === "fail" || cls.kind === "absent");
+
+    el.rName.textContent = name;
+    el.rSeat.textContent = toArabicDigits(seat);
+    el.rStatus.textContent = status;
+    el.rTotal.textContent = formatNumber(score) + " / " + toArabicDigits(MAX_TOTAL);
+
+    var pct = MAX_TOTAL > 0 ? (score / MAX_TOTAL) * 100 : 0;
+    pct = Math.max(0, Math.min(100, pct));
+    el.rPct.textContent = "%" + formatNumber(pct);
+
+    el.resultSeal.classList.toggle("fail", isFail);
+    el.sealIconPass.classList.toggle("hidden", isFail);
+    el.sealIconFail.classList.toggle("hidden", !isFail);
+    el.congratsTag.classList.toggle("fail", isFail);
+    el.congratsTag.textContent = isFail ? "نتيجتك جاهزة" : "ألف مبروك يا بطل!";
+    el.statusCol.classList.toggle("fail", isFail);
+    el.pctCol.classList.toggle("fail", isFail);
+    el.rBar.classList.toggle("fail", isFail);
+
+    el.resultSeal.style.animation = "none";
+    void el.resultSeal.offsetWidth;
+    el.resultSeal.style.animation = "";
+
+    el.rBar.style.width = "0%";
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){ el.rBar.style.width = pct + "%"; });
+    });
+
+    showScreen("result");
+  }
+
+  function resetSearch(){
+    setError(null);
+    setStatus("جاهز للبحث", false);
+    el.seatInput.value = "";
+    el.nameInput.value = "";
+    nameChips = [];
+    renderChips();
+    showScreen("search");
+  }
+
+  el.newSearchBtn.addEventListener("click", resetSearch);
+
+  // ---------------- Demo button ----------------
+  el.demoBtn.addEventListener("click", function(){
+    loadAllData(function(records){
+      var passRec = records.find(function(r){ return classifyStatus(r[3]).kind === "pass"; });
+      if (passRec) showResult(passRec);
+    }, function(){
+      setError("تعذر تحميل نتيجة تجريبية الآن.");
+    });
+  });
+
+  // ---------------- Visit counter (local, cosmetic) ----------------
+  (function initVisitCounter(){
+    var base = 260703;
+    var stored = 0;
+    try { stored = parseInt(localStorage.getItem("natigetak_visits") || "0", 10) || 0; } catch(e){}
+    var count = base + stored;
+    try { localStorage.setItem("natigetak_visits", String(stored + 1)); } catch(e){}
+    el.visitCount.textContent = toArabicDigits(count);
+  })();
+
+  // init
+  setMode("name");
+  showScreen("search");
+})();
+</script>
+</body>
+</html>
