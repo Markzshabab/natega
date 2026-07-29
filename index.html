@@ -695,11 +695,12 @@
   "use strict";
 
   // ---------------- Config ----------------
-  var SHARD_COUNT = 20;
+  var SHARD_START = 200;
+  var SHARD_END = 299;
+  var SHARD_COUNT = SHARD_END - SHARD_START + 1;
   var SHARD_URLS = [];
-  for (var i = 0; i < SHARD_COUNT; i++){
-    var idx = (i < 10 ? "0" + i : "" + i);
-    SHARD_URLS.push("data/" + idx + "d.json");
+  for (var i = SHARD_START; i <= SHARD_END; i++){
+    SHARD_URLS.push("data/" + i + ".json");
   }
   var MAX_TOTAL = 320; // أقصى مجموع للدرجات (لحساب النسبة المئوية)
 
@@ -1049,9 +1050,9 @@
     el.rStatus.textContent = status;
     el.rTotal.textContent = formatNumber(score) + " / " + toArabicDigits(MAX_TOTAL);
 
-    var pct = MAX_TOTAL > 0 ? (score / MAX_TOTAL) * 100 : 0;
+    var pct = MAX_TOTAL > 0 ? +(score / MAX_TOTAL * 100).toFixed(2) : 0;
     pct = Math.max(0, Math.min(100, pct));
-    el.rPct.textContent = "%" + formatNumber(pct);
+    el.rPct.textContent = "%" + toArabicDigits(pct.toFixed(2));
 
     el.resultSeal.classList.toggle("fail", isFail);
     el.sealIconPass.classList.toggle("hidden", isFail);
