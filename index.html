@@ -553,7 +553,7 @@
     <div class="card loading-wrap" id="loadingScreen">
       <div class="ring" id="loadRing"></div>
       <p>بنجمّع بيانات النتيجة...</p>
-      <span id="loadDetail">جاري تحميل 0 من 20 ملف</span>
+      <span id="loadDetail">جاري تحميل 0 من 100 ملف</span>
     </div>
 
     <!-- ================= MULTI-MATCH LIST ================= -->
@@ -697,15 +697,12 @@
   // ---------------- Config ----------------
   var SHARD_START = 200;
   var SHARD_END = 299;
-  var SHARD_URLS = [];
-  for (var i = SHARD_START; i <= SHARD_END; i++){
-    SHARD_URLS.push("data/" + i + ".json");
-  }
-  var SHARD_COUNT = SHARD_URLS.length;
+  var DATA_BASE = "data/";
+  var SHARD_COUNT = SHARD_END - SHARD_START + 1;
   var MAX_TOTAL = 320; // أقصى مجموع للدرجات (لحساب النسبة المئوية)
 
   // ---------------- State ----------------
-  var allRecords = null;
+  var shardCache = {}; // Cache for loaded shards
   var isLoading = false;
   var mode = "name";
   var nameChips = [];
@@ -818,64 +815,71 @@
     return { kind:"other" };
   }
 
-  // ---------------- Data loading ----------------
-  function loadAllData(onDone, onFail){
-    if (allRecords){ onDone(allRecords); return; }
-    if (isLoading){ return; }
-    isLoading = true;
-    showScreen("loading");
-
-    var loaded = 0;
-    var combined = [];
-    var anyFailed = false;
-
-    function updateProgress(){
-      var pct = Math.round((loaded / SHARD_COUNT) * 100);
-      el.loadRing.style.setProperty("--pct", pct + "%");
-      el.loadDetail.textContent = "جاري تحميل " + toArabicDigits(loaded) + " من " + toArabicDigits(SHARD_COUNT) + " ملف";
-    }
-    updateProgress();
-
-    var tasks = SHARD_URLS.map(function(url){
-      return fetch(url, { cache: "force-cache" })
-        .then(function(res){
-          if (!res.ok) throw new Error("bad status " + res.status);
-          return res.json();
-        })
-        .then(function(json){
-          if (Array.isArray(json)){
-            var normalized = json.map(function(item){
-              if (Array.isArray(item)) return item; // already in [seat, name, score, status] form
-              return [
-                item.seating_no,
-                item.arabic_name,
-                item.total_degree,
-                item.student_case_desc
-              ];
-            });
-            combined = combined.concat(normalized);
-          }
-          loaded++; updateProgress();
-        })
-        .catch(function(err){
-          anyFailed = true;
-          loaded++; updateProgress();
-          console.warn("Failed to load shard:", url, err);
-        });
-    });
-
-    Promise.all(tasks).then(function(){
-      isLoading = false;
-      if (combined.length === 0){
-        if (onFail) onFail();
+  // ==================== SMART DATA LOADING ====================
+  
+  // Load single shard with caching - SUPER FAST! ⚡
+  function loadShard(shardNum) {
+    return new Promise(function(resolve, reject) {
+      // Check cache first
+      if (shardCache[shardNum]) {
+        resolve(shardCache[shardNum]);
         return;
       }
-      allRecords = combined;
-      if (anyFailed){
-        console.warn("بعض ملفات البيانات لم يتم تحميلها، النتائج قد تكون غير كاملة.");
-      }
-      onDone(allRecords);
+
+      var url = DATA_BASE + shardNum + ".json";
+      
+      fetch(url, { cache: "force-cache" })
+        .then(function(res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function(data) {
+          // Normalize data to array format [seat, name, score, status]
+          var normalized = data.map(function(item) {
+            if (Array.isArray(item)) return item;
+            return [
+              item.seating_no,
+              item.arabic_name,
+              item.total_degree,
+              item.student_case_desc
+            ];
+          });
+          shardCache[shardNum] = normalized;
+          resolve(normalized);
+        })
+        .catch(function(err) {
+          console.warn("Failed to load shard:", shardNum, err);
+          reject(err);
+        });
     });
+  }
+
+  // Load all shards progressively (for name search)
+  function loadAllShardsProgressively(onProgress, onDone) {
+    var loaded = 0;
+    var allRecords = [];
+
+    function loadNext(index) {
+      if (index > SHARD_END) {
+        onDone(allRecords);
+        return;
+      }
+
+      loaded++;
+      var pct = Math.round((loaded / SHARD_COUNT) * 100);
+      onProgress(loaded, pct);
+
+      loadShard(index).then(function(records) {
+        allRecords = allRecords.concat(records);
+        // Small delay to not block UI
+        setTimeout(function() { loadNext(index + 1); }, 5);
+      }).catch(function() {
+        // Continue even if one fails
+        setTimeout(function() { loadNext(index + 1); }, 5);
+      });
+    }
+
+    loadNext(SHARD_START);
   }
 
   // ---------------- Mode switching ----------------
@@ -936,7 +940,9 @@
     }
   });
 
-  // ---------------- Search logic ----------------
+  // ==================== SMART SEARCH LOGIC ====================
+
+  // Search by seating number - LOADS ONLY 1 FILE! ⚡
   function doSeatSearch(){
     var raw = toWesternDigits(el.seatInput.value || "").replace(/\D/g, "");
     if (!raw){
@@ -946,22 +952,41 @@
     setError(null);
     setStatus("بنبحث عن رقم الجلوس...", true);
 
-    loadAllData(function(records){
-      var match = records.filter(function(r){ return String(r[0]) === raw; });
-      if (match.length === 0){
+    // Extract first 3 digits to determine which shard
+    var prefix = parseInt(raw.substring(0, 3));
+    
+    if (prefix < SHARD_START || prefix > SHARD_END) {
+      setStatus("جاهز للبحث", false);
+      setError("رقم الجلوس خارج النطاق المتاح (200xxxx - 299xxx)");
+      return;
+    }
+
+    showScreen("loading");
+    el.loadRing.style.setProperty("--pct", "0%");
+    el.loadDetail.textContent = "جاري تحميل ملف البيانات...";
+
+    // Load ONLY the needed shard!
+    loadShard(prefix).then(function(records){
+      el.loadRing.style.setProperty("--pct", "100%");
+      el.loadDetail.textContent = "تم التحميل! جاري البحث...";
+      
+      var match = records.find(function(r){ return String(r[0]) === raw; });
+      
+      if (match){
+        setStatus("تم العثور على النتيجة", false);
+        showResult(match);
+      } else {
         setStatus("جاهز للبحث", false);
         showNoResults("مفيش نتيجة لرقم الجلوس ده", "تأكد من الرقم وحاول تاني، أو جرب البحث بالاسم بدل رقم الجلوس.");
-      } else {
-        setStatus("تم العثور على النتيجة", false);
-        showResult(match[0]);
       }
-    }, function(){
+    }).catch(function(){
       setStatus("جاهز للبحث", false);
       setError("تعذر تحميل قاعدة بيانات النتيجة. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.");
       showScreen("search");
     });
   }
 
+  // Search by name - PROGRESSIVE LOADING! 📊
   function doNameSearch(){
     var pending = el.nameInput.value.trim();
     var words = nameChips.slice();
@@ -983,27 +1008,30 @@
     }
 
     setStatus("بنبحث بالاسم...", true);
+    showScreen("loading");
 
-    loadAllData(function(records){
-      var matches = records.filter(function(r){
-        var normName = normalizeArabic(r[1]);
-        return terms.every(function(t){ return normName.indexOf(t) !== -1; });
-      });
+    loadAllShardsProgressively(
+      function(loaded, pct) {
+        el.loadRing.style.setProperty("--pct", pct + "%");
+        el.loadDetail.textContent = "جاري تحميل " + toArabicDigits(loaded) + " من " + toArabicDigits(SHARD_COUNT) + " ملف (" + toArabicDigits(pct) + "%)";
+      },
+      function(allRecords) {
+        var matches = allRecords.filter(function(r){
+          var normName = normalizeArabic(r[1]);
+          return terms.every(function(t){ return normName.indexOf(t) !== -1; });
+        });
 
-      setStatus("جاهز للبحث", false);
+        setStatus("جاهز للبحث", false);
 
-      if (matches.length === 0){
-        showNoResults("مفيش نتائج مطابقة", "جرب تقلل عدد الكلمات، أو تأكد من كتابة الاسم صح.");
-      } else if (matches.length === 1){
-        showResult(matches[0]);
-      } else {
-        showList(matches);
+        if (matches.length === 0){
+          showNoResults("مفيش نتائج مطابقة", "جرب تقلل عدد الكلمات، أو تأكد من كتابة الاسم صح.");
+        } else if (matches.length === 1){
+          showResult(matches[0]);
+        } else {
+          showList(matches);
+        }
       }
-    }, function(){
-      setStatus("جاهز للبحث", false);
-      setError("تعذر تحميل قاعدة بيانات النتيجة. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.");
-      showScreen("search");
-    });
+    );
   }
 
   el.submitBtn.addEventListener("click", function(){
@@ -1101,14 +1129,20 @@
   // ---------------- Demo button ----------------
   var DEMO_SEAT = "2759461";
   el.demoBtn.addEventListener("click", function(){
-    loadAllData(function(records){
+    var demoPrefix = parseInt(String(DEMO_SEAT).substring(0, 3));
+    
+    setStatus("جاري تحميل نتيجة تجريبية...", true);
+    
+    loadShard(demoPrefix).then(function(records){
       var demoRec = records.find(function(r){ return String(r[0]) === DEMO_SEAT; });
       if (!demoRec){
         demoRec = records.find(function(r){ return classifyStatus(r[3]).kind === "pass"; });
       }
       if (demoRec) showResult(demoRec);
-    }, function(){
+      setStatus("جاهز للبحث", false);
+    }).catch(function(){
       setError("تعذر تحميل نتيجة تجريبية الآن.");
+      setStatus("جاهز للبحث", false);
     });
   });
 
@@ -1146,6 +1180,10 @@
   setMode("name");
   showScreen("search");
   handleDeepLink();
+
+  console.log("%c🎓 نتيجة الثانوية العامة 2026 - نسخة محسنة", "font-size: 20px; font-weight: bold; color: #EE5A45;");
+  console.log("%c⚡ البحث برقم الجلوس: يحمل 1 ملف فقط!", "color: green; font-weight: bold;");
+  console.log("%c📊 البحث بالاسم: تحميل تدريجي مع شريط تقدم!", "color: orange; font-weight: bold;");
 })();
 </script>
 </body>
