@@ -697,11 +697,11 @@
   // ---------------- Config ----------------
   var SHARD_START = 200;
   var SHARD_END = 299;
-  var SHARD_COUNT = SHARD_END - SHARD_START + 1;
   var SHARD_URLS = [];
   for (var i = SHARD_START; i <= SHARD_END; i++){
     SHARD_URLS.push("data/" + i + ".json");
   }
+  var SHARD_COUNT = SHARD_URLS.length;
   var MAX_TOTAL = 320; // أقصى مجموع للدرجات (لحساب النسبة المئوية)
 
   // ---------------- State ----------------
@@ -843,7 +843,18 @@
           return res.json();
         })
         .then(function(json){
-          if (Array.isArray(json)) combined = combined.concat(json);
+          if (Array.isArray(json)){
+            var normalized = json.map(function(item){
+              if (Array.isArray(item)) return item; // already in [seat, name, score, status] form
+              return [
+                item.seating_no,
+                item.arabic_name,
+                item.total_degree,
+                item.student_case_desc
+              ];
+            });
+            combined = combined.concat(normalized);
+          }
           loaded++; updateProgress();
         })
         .catch(function(err){
@@ -1088,10 +1099,14 @@
   el.newSearchBtn.addEventListener("click", resetSearch);
 
   // ---------------- Demo button ----------------
+  var DEMO_SEAT = "2759461";
   el.demoBtn.addEventListener("click", function(){
     loadAllData(function(records){
-      var passRec = records.find(function(r){ return classifyStatus(r[3]).kind === "pass"; });
-      if (passRec) showResult(passRec);
+      var demoRec = records.find(function(r){ return String(r[0]) === DEMO_SEAT; });
+      if (!demoRec){
+        demoRec = records.find(function(r){ return classifyStatus(r[3]).kind === "pass"; });
+      }
+      if (demoRec) showResult(demoRec);
     }, function(){
       setError("تعذر تحميل نتيجة تجريبية الآن.");
     });
