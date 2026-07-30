@@ -355,7 +355,7 @@
   .divider{ height:1px; background:var(--line); margin-bottom:16px; }
 
   .stat-row{ display:flex; align-items:flex-start; margin-bottom:14px; }
-  .stat-row-2{ margin-bottom:0; margin-top:8px; padding-top:14px; border-top:1px dashed var(--line); }
+  .stat-row-2{ margin-bottom:0; margin-top:8px; padding-top:14px; border-top:1px dashed var(--line); justify-content:center; }
   .stat-col{ flex:1; }
   .stat-col .lbl{ font-size:11px; color:var(--muted); margin-bottom:6px; }
   .stat-col .val{ font-family:'Cairo',sans-serif; font-weight:800; font-size:16px; }
@@ -364,73 +364,91 @@
   .stat-col.pct-col{ text-align:left; }
   .stat-col.pct-col .val{ font-size:30px; color:var(--gold); }
   .stat-col.pct-col.fail .val{ color:var(--danger); }
-  .stat-col.rank-col .val{ font-size:18px; color:#2D6A4F; }
-  .stat-col.grade-col{ text-align:left; }
-  .stat-col.grade-col .val{ font-size:22px; color:#E76F51; }
+  .stat-col.grade-col-full{ text-align:center; flex:none; }
+  .stat-col.grade-col-full .val{ font-size:26px; color:#E76F51; }
 
   /* ---------- Opportunities Card ---------- */
   .opportunities-card{
-    margin-top:18px; background:linear-gradient(135deg,#F8FAFC 0%,#EEF2FF 100%);
-    border:1.5px solid #C7D2FE; border-radius:16px; padding:18px 18px 16px;
+    margin-top:18px; background:linear-gradient(135deg,#FFFBEB 0%,#FEF3C7 100%);
+    border:1.5px solid #FCD34D; border-radius:16px; padding:18px 18px 0;
     animation:fadeInUp .5s ease .5s both;
   }
   @keyframes fadeInUp{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:translateY(0); } }
   
   .opp-header{
-    display:flex; align-items:center; gap:8px; margin-bottom:10px;
+    display:flex; align-items:center; gap:8px; margin-bottom:12px;
   }
   .opp-icon{
-    width:22px; height:22px; color:#6366F1; flex-shrink:0;
+    width:24px; height:24px; color:#D97706; flex-shrink:0;
   }
   .opp-title{
-    font-family:'Cairo',sans-serif; font-weight:800; font-size:14px;
-    color:#3730A3;
+    font-family:'Cairo',sans-serif; font-weight:800; font-size:15px;
+    color:#92400E;
   }
   
   .opp-intro{
-    font-size:13px; color:#4B5563; line-height:1.7; margin-bottom:14px;
-    padding:10px 12px; background:#fff; border-radius:10px;
-    border:1px dashed #D1D5DB;
+    font-size:13px; color:#78350F; line-height:1.7; margin-bottom:14px;
+    padding:12px 14px; background:#fff; border-radius:10px;
+    border:1px dashed #FCD34D; font-weight:600;
   }
   
   .stage-selector{
     display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;
   }
   .stage-btn{
-    flex:1; min-width:90px; padding:9px 12px; border:1.5px #E0E7FF solid;
+    flex:1; min-width:90px; padding:10px 12px; border:1.5px #FDE68A solid;
     background:#fff; border-radius:10px; font-family:'Tajawal',sans-serif;
     font-weight:700; font-size:12px; cursor:pointer; transition:all .2s ease;
-    color:#6366F1;
+    color:#B45309;
   }
-  .stage-btn:hover{ border-color:#818CF8; background:#EEF2FF; }
+  .stage-btn:hover{ border-color:#FBBF24; background:#FEF3C7; }
   .stage-btn.active{
-    background:linear-gradient(135deg,#6366F1,#8B5CF6);
-    color:#fff; border-color:transparent; box-shadow:0 4px 12px -4px rgba(99,102,241,.45);
+    background:linear-gradient(135deg,#D97706,#B45309);
+    color:#fff; border-color:transparent; box-shadow:0 4px 12px -4px rgba(217,119,6,.45);
   }
   
+  .opp-section{
+    margin-bottom:14px;
+  }
+  .opp-section-title{
+    display:flex; align-items:center; gap:6px;
+    font-family:'Cairo',sans-serif; font-weight:700; font-size:12px;
+    margin-bottom:8px; padding:6px 10px; border-radius:8px;
+  }
+  .opp-section-title.high{ background:#DCFCE7; color:#166534; }
+  .opp-section-title.medium{ background:#FEF9C3; color:#854D0E; }
+  .opp-section-title.low{ background:#FEE2E2; color:#991B1B; }
+  
   .opp-list{
-    display:flex; flex-direction:column; gap:6px; margin-bottom:12px;
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:4px;
   }
   .opp-item{
-    display:flex; align-items:center; gap:8px; padding:10px 12px;
-    background:#fff; border:1px solid #E5E7EB; border-radius:10px;
-    transition:all .15s ease;
+    display:inline-flex; align-items:center; gap:6px; padding:8px 12px;
+    background:#fff; border:1.5px solid #E5E7EB; border-radius:20px;
+    transition:all .15s ease; font-size:12.5px;
   }
-  .opp-item:hover{ border-color:#A5B4FC; transform:translateX(-3px); }
+  .opp-item.high{ border-color:#86EFAC; background:#F0FDF4; }
+  .opp-item.high:hover{ border-color:#22C55E; transform:scale(1.02); }
+  .opp-item.medium{ border-color:#FDE047; background:#FEFCE8; }
+  .opp-item.medium:hover{ border-color:#EAB308; transform:scale(1.02); }
+  .opp-item.low{ border-color:#FCA5A5; background:#FEF2F2; }
+  .opp-item.low:hover{ border-color:#EF4444; transform:scale(1.02); }
+  
   .opp-bullet{
     width:8px; height:8px; border-radius:50%; flex-shrink:0;
-    background:linear-gradient(135deg,#10B981,#34D399);
-    box-shadow:0 2px 6px -2px rgba(16,185,129,.4);
   }
-  .opp-bullet.gold{ background:linear-gradient(135deg,#F59E0B,#FBBF24); box-shadow:0 2px 6px -2px rgba(245,158,11,.4); }
-  .opp-bullet.blue{ background:linear-gradient(135deg,#3B82F6,#60A5FA); box-shadow:0 2px 6px -2px rgba(59,130,246,.4); }
+  .opp-item.high .opp-bullet{ background:#22C55E; box-shadow:0 0 6px rgba(34,197,94,.5); }
+  .opp-item.medium .opp-bullet{ background:#EAB308; box-shadow:0 0 6px rgba(234,179,8,.5); }
+  .opp-item.low .opp-bullet{ background:#EF4444; box-shadow:0 0 6px rgba(239,68,68,.5); }
+  
   .opp-text{
-    font-size:13px; font-weight:600; color:#374151; font-family:'Tajawal',sans-serif;
+    font-weight:600; color:#374151; font-family:'Tajawal',sans-serif;
   }
   
   .opp-note{
-    font-size:11px; color:#9CA3AF; text-align:center; margin:0;
-    padding-top:10px; border-top:1px dashed #E5E7EB;
+    font-size:11px; color:#92400E; text-align:center; margin:0;
+    padding:12px 18px; background:#FEF3C7; border-radius:0 0 16px 16px;
+    margin-top:14px; border-top:1px dashed #FCD34D;
   }
 
   .new-search-btn{
@@ -848,11 +866,7 @@
         </div>
 
         <div class="stat-row stat-row-2">
-          <div class="stat-col rank-col">
-            <div class="lbl">الترتيب على الجمهورية</div>
-            <div class="val" id="rRank">—</div>
-          </div>
-          <div class="stat-col grade-col">
+          <div class="stat-col grade-col-full">
             <div class="lbl">التقدير</div>
             <div class="val" id="rGrade">—</div>
           </div>
@@ -1083,7 +1097,6 @@
     rTotal: document.getElementById("rTotal"),
     rPct: document.getElementById("rPct"),
     rBar: document.getElementById("rBar"),
-    rRank: document.getElementById("rRank"),
     rGrade: document.getElementById("rGrade"),
     opportunitiesCard: document.getElementById("opportunitiesCard"),
     oppIntro: document.getElementById("oppIntro"),
@@ -1464,62 +1477,105 @@
   }
 
   // ---------------- Opportunities Data (بيانات الفرص التعليمية) ----------------
-  var OPPORTUNITIES_DATA = [
-    {
-      min: 98, max: 100, stage: 1,
-      science: ["طب بشري", "طب الأسنان", "الصيدلة", "العلاج الطبيعي", "الطب البيطري"],
-      math: ["الهندسة", "الحاسبات والذكاء الاصطناعي", "التخطيط العمراني", "الفنون التطبيقية"],
-      arts: ["الاقتصاد والعلوم السياسية", "الإعلام", "الألسن", "الآثار"]
-    },
-    {
-      min: 95, max: 98, stage: 1,
-      science: ["طب الأسنان", "الصيدلة", "العلاج الطبيعي", "الطب البيطري", "العلوم"],
-      math: ["الهندسة", "الحاسبات والذكاء الاصطناعي", "الذكاء الاصطناعي", "التخطيط العمراني"],
-      arts: ["الإعلام", "الألسن", "الآثار", "التجارة"]
-    },
-    {
-      min: 90, max: 95, stage: 1,
-      science: ["الصيدلة", "الطب البيطري", "العلوم", "التمريض", "الزراعة"],
-      math: ["الهندسة", "الحاسبات", "العلوم", "التربية"],
-      arts: ["الإعلام", "الآداب", "التجارة", "الحقوق"]
-    },
-    {
-      min: 85, max: 90, stage: 2,
-      science: ["العلوم", "التمريض", "الزراعة", "التربية", "المعاهد الصحية"],
-      math: ["الحاسبات", "العلوم", "التربية", "التكنولوجيا"],
-      arts: ["الآداب", "الحقوق", "التجارة", "الخدمة الاجتماعية"]
-    },
-    {
-      min: 80, max: 85, stage: 2,
-      science: ["العلوم", "الزراعة", "التربية", "المعاهد العليا"],
-      math: ["العلوم", "التربية", "المعاهد الهندسية"],
-      arts: ["الآداب", "الحقوق", "التجارة", "السياحة والفنادق"]
-    },
-    {
-      min: 75, max: 80, stage: 3,
-      science: ["الزراعة", "التربية", "المعاهد"],
-      math: ["التربية", "المعاهد الهندسية", "المعاهد"],
-      arts: ["الحقوق", "التجارة", "الخدمة الاجتماعية", "المعاهد"]
-    },
-    {
-      min: 70, max: 75, stage: 3,
-      science: ["المعاهد العليا", "المعاهد المتوسطة"],
-      math: ["المعاهد الهندسية", "المعاهد العليا"],
-      arts: ["المعاهد العليا", "المعاهد المتوسطة"]
-    },
-    {
-      min: 60, max: 70, stage: 3,
-      science: ["المعاهد العليا", "المعاهد الخاصة"],
-      math: ["المعاهد العليا", "المعاهد الخاصة"],
-      arts: ["المعاهد العليا", "المعاهد الخاصة"]
-    },
-    {
-      min: 50, max: 60, stage: 3,
-      science: ["بعض المعاهد الخاصة"],
-      math: ["بعض المعاهد الخاصة"],
-      arts: ["بعض المعاهد الخاصة"]
-    }
-  ];
+  // 🟢 فرصة كبيرة | 🟡 فرصة متوسطة | 🔴 فرصة تنافسية
+  var OPPORTUNITIES_DATA = {
+    science: [
+      {
+        min: 95, max: 100.01, level: "high",
+        label: "🟢 فرصة كبيرة (95% فأكثر)",
+        colleges: ["الطب البشري", "طب الأسنان", "العلاج الطبيعي", "الصيدلة"]
+      },
+      {
+        min: 92, max: 95, level: "medium",
+        label: "🟡 فرصة متوسطة (92% - أقل من 95%)",
+        colleges: ["الطب البيطري", "العلوم", "التمريض", "الحاسبات والذكاء الاصطناعي", "علوم ذوي الإعاقة والتأهيل"]
+      },
+      {
+        min: 89, max: 92, level: "medium",
+        label: "🟡 فرصة متوسطة (89% - أقل من 92%)",
+        colleges: ["العلوم", "الزراعة", "التمريض", "الحاسبات والمعلومات", "التكنولوجيا الحيوية", "الاقتصاد المنزلي"]
+      },
+      {
+        min: 85, max: 89, level: "low",
+        label: "🔴 فرصة تنافسية (85% - أقل من 89%)",
+        colleges: ["الزراعة", "العلوم", "التمريض", "التربية", "التربية النوعية", "الآداب", "التجارة"]
+      },
+      {
+        min: 80, max: 85, level: "low",
+        label: "🔴 فرصة تنافسية (80% - أقل من 85%)",
+        colleges: ["الزراعة", "التربية", "التجارة", "الحقوق", "الآداب", "الخدمة الاجتماعية"]
+      },
+      {
+        min: 0, max: 80, level: "low",
+        label: "🔴 فرصة تنافسية (أقل من 80%)",
+        colleges: ["المعاهد العليا", "المعاهد الصحية", "المعاهد الفنية", "المعاهد التكنولوجية"]
+      }
+    ],
+    math: [
+      {
+        min: 95, max: 100.01, level: "high",
+        label: "🟢 فرصة كبيرة (95% فأكثر)",
+        colleges: ["الهندسة", "الحاسبات والذكاء الاصطناعي", "التخطيط العمراني"]
+      },
+      {
+        min: 92, max: 95, level: "medium",
+        label: "🟡 فرصة متوسطة (92% - أقل من 95%)",
+        colleges: ["الهندسة", "الحاسبات والمعلومات", "الذكاء الاصطناعي", "العلوم (رياضيات - فيزياء)"]
+      },
+      {
+        min: 89, max: 92, level: "medium",
+        label: "🟡 فرصة متوسطة (89% - أقل من 92%)",
+        colleges: ["الحاسبات والمعلومات", "العلوم", "الزراعة", "الفنون الجميلة (عمارة)", "التخطيط العمراني"]
+      },
+      {
+        min: 85, max: 89, level: "low",
+        label: "🔴 فرصة تنافسية (85% - أقل من 89%)",
+        colleges: ["العلوم", "الحاسبات", "التربية", "التجارة", "الآداب"]
+      },
+      {
+        min: 80, max: 85, level: "low",
+        label: "🔴 فرصة تنافسية (80% - أقل من 85%)",
+        colleges: ["التجارة", "الحقوق", "التربية", "الآداب", "الخدمة الاجتماعية"]
+      },
+      {
+        min: 0, max: 80, level: "low",
+        label: "🔴 فرصة تنافسية (أقل من 80%)",
+        colleges: ["المعاهد الهندسية", "المعاهد التكنولوجية", "المعاهد العليا المعتمدة"]
+      }
+    ],
+    arts: [
+      {
+        min: 95, max: 100.01, level: "high",
+        label: "🟢 فرصة كبيرة (95% فأكثر)",
+        colleges: ["الاقتصاد والعلوم السياسية", "الإعلام", "الألسن", "الآثار"]
+      },
+      {
+        min: 92, max: 95, level: "medium",
+        label: "🟡 فرصة متوسطة (92% - أقل من 95%)",
+        colleges: ["الإعلام", "الألسن", "الآثار", "دار العلوم", "التربية"]
+      },
+      {
+        min: 89, max: 92, level: "medium",
+        label: "🟡 فرصة متوسطة (89% - أقل من 92%)",
+        colleges: ["الآثار", "دار العلوم", "التربية", "السياحة والفنادق", "الآداب", "الحقوق", "التجارة"]
+      },
+      {
+        min: 85, max: 89, level: "low",
+        label: "🔴 فرصة تنافسية (85% - أقل من 89%)",
+        colleges: ["الآداب", "الحقوق", "التجارة", "الخدمة الاجتماعية", "التربية النوعية", "التربية الرياضية", "السياحة والفنادق"]
+      },
+      {
+        min: 80, max: 85, level: "low",
+        label: "🔴 فرصة تنافسية (80% - أقل من 85%)",
+        colleges: ["الحقوق", "التجارة", "الآداب", "الخدمة الاجتماعية", "التربية النوعية", "التربية الرياضية"]
+      },
+      {
+        min: 0, max: 80, level: "low",
+        label: "🔴 فرصة تنافسية (أقل من 80%)",
+        colleges: ["المعاهد العليا المعتمدة", "المعاهد التجارية", "المعاهد السياحية", "المعاهد الإدارية"]
+      }
+    ]
+  };
 
   var currentTrack = "science";
   var currentPct = 0;
@@ -1528,39 +1584,62 @@
   function showOpportunities(pct){
     currentPct = pct;
     
-    // Find matching range
-    var matched = null;
-    for(var i = 0; i < OPPORTUNITIES_DATA.length; i++){
-      var range = OPPORTUNITIES_DATA[i];
-      if(pct >= range.min && pct < range.max){
-        matched = range;
-        break;
-      }
-    }
-    if(!matched && pct >= 98) matched = OPPORTUNITIES_DATA[0];
-    if(!matched && pct < 50) matched = OPPORTUNITIES_DATA[OPPORTUNITIES_DATA.length - 1];
+    // Get data for current track
+    var trackData = OPPORTUNITIES_DATA[currentTrack] || [];
     
     // Update intro message based on track
-    var trackNames = { science: "علمي علوم", math: "علمي رياضة", arts: "أدبي" };
-    var introTexts = {
-      science: "🎯 لو أنت شعبة <b>علمي علوم</b>، أمامك فرصة دخول الكليات دي:",
-      math: "🎯 لو أنت شعبة <b>علمي رياضة</b>، أمامك فرصة دخول الكليات دي:",
-      arts: "🎯 لو أنت شعبة <b>أدبي</b>، أمامك فرصة دخول الكلياتدي:"
+    var trackInfo = {
+      science: { name: "🧪 علمي علوم", intro: "بناءً على نسبتك <b>%PCT%</b>، هذه هي فرصك المتاحة في شعبة <b>علمي علوم</b>:" },
+      math: { name: "📐 علمي رياضة", intro: "بناءً على نسبتك <b>%PCT%</b>، هذه هي فرصك المتاحة في شعبة <b>علمي رياضة</b>:" },
+      arts: { name: "📚 أدبي", intro: "بناءً على نسبتك <b>%PCT%</b>، هذه هي فرصك المتاحة في شعبة <b>أدبي</b>:" }
     };
-    el.oppIntro.innerHTML = introTexts[currentTrack];
     
-    // Render opportunities list
-    if(matched){
-      var items = matched[currentTrack] || [];
-      var html = "";
-      for(var j = 0; j < items.length; j++){
-        var bulletClass = j === 0 ? "gold" : (j < 3 ? "" : "blue");
-        html += '<div class="opp-item"><span class="opp-bullet ' + bulletClass + '"></span><span class="opp-text">' + escapeHtml(items[j]) + '</span></div>';
+    var info = trackInfo[currentTrack];
+    el.oppIntro.innerHTML = info.intro.replace("%PCT%", toArabicDigits(pct.toFixed(1)) + "%");
+    
+    // Build HTML with sections by opportunity level
+    var html = "";
+    
+    if(trackData.length > 0){
+      for(var i = 0; i < trackData.length; i++){
+        var section = trackData[i];
+        
+        // Only show sections that match the percentage range
+        if(pct >= section.min && pct < section.max){
+          html += '<div class="opp-section">';
+          html += '<div class="opp-section-title ' + section.level + '">' + section.label + '</div>';
+          html += '<div class="opp-list">';
+          
+          for(var j = 0; j < section.colleges.length; j++){
+            html += '<div class="opp-item ' + section.level + '"><span class="opp-bullet"></span><span class="opp-text">' + escapeHtml(section.colleges[j]) + '</span></div>';
+          }
+          
+          html += '</div></div>';
+        }
       }
-      el.oppList.innerHTML = html;
-    } else {
-      el.oppList.innerHTML = '<div class="opp-item"><span class="opp-text">لا توجد بيانات متاحة لهذه النسبة</span></div>';
+      
+      // If no matching range found (edge case), show all sections
+      if(html === ""){
+        for(var k = 0; k < trackData.length; k++){
+          var sec = trackData[k];
+          if(pct >= sec.min && pct <= sec.max || (k === trackData.length - 1 && pct < sec.max)){
+            html += '<div class="opp-section">';
+            html += '<div class="opp-section-title ' + sec.level + '">' + sec.label + '</div>';
+            html += '<div class="opp-list">';
+            for(var m = 0; m < sec.colleges.length; m++){
+              html += '<div class="opp-item ' + sec.level + '"><span class="opp-bullet"></span><span class="opp-text">' + escapeHtml(sec.colleges[m]) + '</span></div>';
+            }
+            html += '</div></div>';
+          }
+        }
+      }
     }
+    
+    if(html === ""){
+      html = '<div class="opp-section"><div class="opp-list"><div class="opp-item medium"><span class="opp-text">لا توجد بيانات متاحة لهذه النسبة</span></div></div></div>';
+    }
+    
+    el.oppList.innerHTML = html;
   }
 
   // ---------------- Stage Selector Events ----------------
@@ -1609,11 +1688,6 @@
     el.rGrade.textContent = grade.text;
     el.rGrade.style.color = grade.color;
 
-    // Display Republic Ranking (الترتيب على الجمهورية)
-    // This can be updated with actual ranking data when available
-    var estimatedRank = estimateRank(score);
-    el.rRank.textContent = estimatedRank;
-
     // Display Opportunities (فرصك التعليمية)
     showOpportunities(pct);
 
@@ -1636,18 +1710,6 @@
     });
 
     showScreen("result");
-  }
-
-  // ---------------- Estimate Republic Ranking ----------------
-  function estimateRank(score){
-    // This is a placeholder - replace with actual ranking data
-    // For now, showing approximate rank based on score ranges
-    if (score >= 300) return toArabicDigits(Math.floor(Math.random() * 500 + 100));
-    if (score >= 280) return toArabicDigits(Math.floor(Math.random() * 2000 + 500));
-    if (score >= 250) return toArabicDigits(Math.floor(Math.random() * 5000 + 2500));
-    if (score >= 200) return toArabicDigits(Math.floor(Math.random() * 10000 + 7500));
-    if (score >= 150) return toArabicDigits(Math.floor(Math.random() * 15000 + 17500));
-    return toArabicDigits(Math.floor(Math.random() * 20000 + 32500));
   }
 
   function resetSearch(){
